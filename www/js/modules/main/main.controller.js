@@ -4,9 +4,9 @@
 
   var app = angular.module('main' );
   app.controller('mainCtrl', mainCtrl);
-  mainCtrl.$inject = [ '$scope', 'pushSrvc' ];
+  mainCtrl.$inject = [ '$scope', 'pushSrvc', '$http' ];
 
-  function mainCtrl( $scope, pushSrvc ) {
+  function mainCtrl( $scope, pushSrvc, $http ) {
 
     var vm = angular.extend(this, { });
 
@@ -54,10 +54,56 @@
             return;
           } else {
             if(qrResult.format==="QR_CODE") {
-                vm.uuid = qrResult.text;
-                pushSrvc.subscribe( qrResult.text );
+
+                /* qrResult.text ; // TAKE THE UUID OUT HERE */
+                
+               /*  var params=qrResult.text.split("=")[1];
+                
+               vm.uuid = qrResult.text; */
+                /* pushSrvc.subscribe( params );
+                vm.subscriptionFeedback = "Subscribed!";
+                $scope.$apply(); */
+/*                 if (qrResult.text.split("=")[2]!= null)
+                { */
+                /* var splitstring=qrResult.text.split("=")[1];
+                vm.uuid=params.text.split("&")[0];
+                params=vm.uuid;
+                var endpointparam=splitstring.text.split("=")[2];
+                var endpoint =endpointparam.text.split("&")[0]; */
+
+
+                var qrCodeString= qrResult.text;
+                var uuid= (qrCodeString.split("=")[1]).split("&")[0];
+                vm.uuid= uuid;
+                var endpoint = qrCodeString.split("=")[2];
+                //push
+                pushSrvc.subscribe(uuid);
                 vm.subscriptionFeedback = "Subscribed!";
                 $scope.$apply();
+
+
+                /* }
+                else{
+                vm.uuid=params;
+                var endpoint= "https://anti-parking-api.herokuapp.com/";
+                pushSrvc.subscribe( params);
+                vm.subscriptionFeedback = "Subscribed!";
+                $scope.$apply();
+                } */
+                var incidentJSON={"sticker_uuid":uuid};
+                $http.post(endpoint + 'incidents/',JSON.stringify(incidentJSON))
+                .then(
+                    function success(response) {
+                        vm.responses = response.data;
+                        console.info(response);
+                    },
+                    function failure(err) {
+                        console.error(err);
+                    }
+                  )
+
+
+
             }
           }
         },
@@ -75,7 +121,10 @@
     vm.handleInbound = function handleInbound( data ) {
       console.log("Got inbound message", data);
       console.log("payload", JSON.parse(data.payload.payload));
-      alert(JSON.stringify(data));
+      var notification=JSON.parse(data.payload.payload)
+      alert(JSON.stringify(notification.RESPONSE));
+      
+      
     };
 
     vm.initialise();
