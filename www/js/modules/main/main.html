@@ -1,0 +1,24 @@
+<ion-view >
+  <div id="main">
+
+  <div id="not-connected" ng-show="!vm.pushConnected">Connecting...
+    <button ion-button round ng-click="vm.initialise();">Retry</button>
+  </div>
+
+  <div id="connected" ng-show="vm.pushConnected===true">
+    <p>Connected.</p>
+  </div>
+
+  <div style="padding:16px;" ng-show="vm.deviceId!==false">
+    <div ng-show="vm.activity===vm.ACTIVITY.SCAN">
+      <button ion-button round ng-click="vm.startCodeScan()">Scan QR Code</button>
+    </div>
+    </div>
+  </div>
+
+  <div ng-show="vm.uuid!=false">
+    UUID:{{vm.uuid}}
+    <div>{{vm.subscriptionFeedback}}</div>
+  </div>
+</ion-view>
+
