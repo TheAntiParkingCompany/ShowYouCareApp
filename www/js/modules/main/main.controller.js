@@ -71,11 +71,18 @@
                 var endpointparam=splitstring.text.split("=")[2];
                 var endpoint =endpointparam.text.split("&")[0]; */
 
-
-                var qrCodeString= qrResult.text;
+                //string split stuff removed because bad
+                /* var qrCodeString= qrResult.text;
                 var uuid= (qrCodeString.split("=")[1]).split("&")[0];
                 vm.uuid= uuid;
-                var endpoint = qrCodeString.split("=")[2];
+                var endpoint = qrCodeString.split("=")[2]; */
+                var urlParams = new URLSearchParams(window.location.search);
+                var uuid = urlParams.get('uuid'); //gets uuid from url
+                var parkapi = urlParams.get('parkapi'); //gets uuid from url
+                vm.uuid= uuid;
+
+                
+                
                 //push
                 pushSrvc.subscribe(uuid);
                 vm.subscriptionFeedback = "Subscribed!";
@@ -91,7 +98,7 @@
                 $scope.$apply();
                 } */
                 var incidentJSON={"sticker_uuid":uuid};
-                $http.post(endpoint + 'incidents/',JSON.stringify(incidentJSON))
+                $http.post(parkapi + 'incidents/',JSON.stringify(incidentJSON))
                 .then(
                     function success(response) {
                         vm.responses = response.data;
