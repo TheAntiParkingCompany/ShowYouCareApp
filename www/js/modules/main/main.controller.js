@@ -76,7 +76,7 @@
                 var uuid= (qrCodeString.split("=")[1]).split("&")[0];
                 vm.uuid= uuid;
                 var endpoint = qrCodeString.split("=")[2]; */
-                var urlParams = new URLSearchParams(window.location.search);
+                var urlParams = new URLSearchParams(qrResult.text);
                 var uuid = urlParams.get('uuid'); //gets uuid from url
                 var parkapi = urlParams.get('parkapi'); //gets uuid from url
                 vm.uuid= uuid;
@@ -98,7 +98,7 @@
                 $scope.$apply();
                 } */
                 var incidentJSON={"sticker_uuid":uuid};
-                $http.post(parkapi + 'incidents/',JSON.stringify(incidentJSON))
+                $http.post("https://" +parkapi + '.com/incidents/',JSON.stringify(incidentJSON))
                 .then(
                     function success(response) {
                         vm.responses = response.data;
