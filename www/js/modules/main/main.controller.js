@@ -4,11 +4,17 @@
 
   var app = angular.module('main' );
   app.controller('mainCtrl', mainCtrl);
-  mainCtrl.$inject = [ '$scope', 'pushSrvc', '$http' ];
+  mainCtrl.$inject = [ '$scope', 'pushSrvc', '$http', 'locationsSrvc' ];
 
-  function mainCtrl( $scope, pushSrvc, $http ) {
+  function mainCtrl( $scope, pushSrvc, $http, locationsSrvc ) {
 
     var vm = angular.extend(this, { });
+    var lat;
+    var lon;
+    var myLocation=new Object();
+    var postcode;
+    //vm.myPostcode;
+    vm.postcodeValidator = locationsSrvc.POSTCODE_VALIDATION_REGEX;
 
     vm.MESSAGE_TIMEOUT_SECONDS = 10;
 
@@ -55,27 +61,7 @@
           } else {
             if(qrResult.format==="QR_CODE") {
 
-                /* qrResult.text ; // TAKE THE UUID OUT HERE */
                 
-               /*  var params=qrResult.text.split("=")[1];
-                
-               vm.uuid = qrResult.text; */
-                /* pushSrvc.subscribe( params );
-                vm.subscriptionFeedback = "Subscribed!";
-                $scope.$apply(); */
-/*                 if (qrResult.text.split("=")[2]!= null)
-                { */
-                /* var splitstring=qrResult.text.split("=")[1];
-                vm.uuid=params.text.split("&")[0];
-                params=vm.uuid;
-                var endpointparam=splitstring.text.split("=")[2];
-                var endpoint =endpointparam.text.split("&")[0]; */
-
-                //string split stuff removed because bad
-                /* var qrCodeString= qrResult.text;
-                var uuid= (qrCodeString.split("=")[1]).split("&")[0];
-                vm.uuid= uuid;
-                var endpoint = qrCodeString.split("=")[2]; */
                 var urlParams = new URLSearchParams(qrResult.text);
                 var uuid = urlParams.get('uuid'); //gets uuid from url
                 var parkapi = urlParams.get('parkapi'); //gets uuid from url
@@ -88,28 +74,171 @@
                 vm.subscriptionFeedback = "Subscribed!";
                 $scope.$apply();
 
+                //console.log("brfore location");
 
-                /* }
-                else{
-                vm.uuid=params;
-                var endpoint= "https://anti-parking-api.herokuapp.com/";
-                pushSrvc.subscribe( params);
-                vm.subscriptionFeedback = "Subscribed!";
-                $scope.$apply();
-                } */
-                var incidentJSON={"sticker_uuid":uuid};
-                $http.post("https://" +parkapi + '.com/incidents/',JSON.stringify(incidentJSON))
-                .then(
-                    function success(response) {
-                        vm.responses = response.data;
-                        console.info(response);
+                vm.getLocation = function() {
+                  if (navigator.geolocation) {
+                    //navigator.geolocation.getCurrentPosition(showPosition);
+                    //console.log("location");
+                    //console.log(location.getBrowserLocation());
+                    //console.log(locationsSrvc.getBrowserLocation());
+                  }
+                  else{
+                    console.log("locationdissabled");
+                  }
+                };
+                //console.log("location2");
+                    //console.log(location.getBrowserLocation());
+                    console.log(locationsSrvc.getBrowserLocation());
+                    locationsSrvc.getBrowserLocation().then(function($$state){
+                      console.log($$state);
+                      vm.state=$$state;
+                      console.log(vm.state);
+                      console.log(vm.state.latitude);
+                      lat=vm.state.latitude;
+                      lon=vm.state.longitude;
+                      console.log(vm.state.longitude);
+
+                      myLocation.latitude=lat;
+                      myLocation.longitude=lon;
+                      console.log(locationsSrvc.getPostcodes(myLocation,500));
+
+
+                      locationsSrvc.getPostcodes(myLocation,500).then(function($$state){
+                        postcode=$$state.result[0].postcode;
+                        /* console.log($$state);
+                        console.log($$state.result);
+                        console.log($$state.result[0].postcode); */
+                        console.log(postcode);
+
+                        //console.log(locationsSrvc.getLocation(vm.myPostcode));
+
+                        locationsSrvc.getLocation(postcode).then(function($$state){
+
+
+                          lat=$$state.result.latitude;
+                          lon=$$state.result.longitude;
+
+                          //post
+                          var date= Date.now();
+                          var incidentJSON={"sticker_uuid":uuid,"postcode":postcode,"lat":lat,"lon":lon,"date":date};
+                          console.log(lat);
+                          console.log(lon);
+                          //var incidentJSON={"sticker_uuid":uuid,"lat":lat,"lon":lon};
+                          //var incidentJSON={"sticker_uuid":uuid};
+                          $http.post("https://" +parkapi + '.com/incidents/',JSON.stringify(incidentJSON))
+                          .then(
+                              function success(response) {
+                                  vm.responses = response.data;
+                                  console.info(response);
+                              },
+                              function failure(err) {
+                                  console.error(err);
+                              }
+                            )
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        }) 
+
+
+
+
+
+
+
+
+
+
+
+
+                      }
+                      )
+                    
+
+
+
+
+
+
+                    //console.log(locationsSrvc.getBrowserLocation().$$state.value.Coordinates.latitude);
+                     /* vm.resolvedd=Promise.resolve(locationsSrvc.getBrowserLocation());
+                    console.log("<p>")
+                    console.log(resolvedd.$$state);
+                    console.log(resolvedd.$$state.value);
+                    console.log("</p>")
+                    vm.state=locationsSrvc.getBrowserLocation().$$state;
+                    vm.co=vm.state.value;
+                    console.log(vm.state);
+                    console.log(vm.co);  */
+                    //vm.lat=locationsSrvc.getBrowserLocation()
+                //get location
+
+                /* vm.handleIsMyLocation = function handleIsMyLocation() {
+                  locationsSrvc.getBrowserLocation().then(
+                    function gotBrowserLocation( position ){
+                      locationsSrvc.locationToPostcode( position, 100, 1 ).then(
+                        function gotPostcodeFromPosition( results ) {
+                          // postcode is in result.postcode
+                          vm.location = {
+                            "lat":results.result[0].latitude,
+                            "lon": results.result[0].longitude
+                          };
+                          console.log(vm.location.lat);
+                          console.log("not broken");
+                          console.log(results.result.latitude);
+                          console.log(vm.location.lon);
+                          vm.maybeSetPostcodeToHere( results.result[0].postcode );
+                        },
+                        function errorPostcodeFromPosition( error ) {
+                          console.log(error);
+                        }
+                      );
                     },
-                    function failure(err) {
-                        console.error(err);
+                    function errorBrowserLocation( error ){
+                      // @TODO this is the user rejecting browser access
+                      console.log("location failed");
+                      toaster.pop({
+                        type: 'error',
+                        title: "Error: No Location Access",
+                        body: 'Please grant access to your location in this browser window before trying again.',
+                        bodyOutputType: 'trustedHtml',
+                        tapToDismiss: false,
+                        showCloseButton: true,
+                        timeout: 0,
+                        onHideCallback: function (toast) {
+                          //alert("click!");
+                          vm.handleIsMyLocation(); // try again!
+                          return true;
+                        }
+                      } );
                     }
-                  )
+                    
+                  );
+                }; */
 
 
+
+
+
+
+
+
+
+
+
+                
+                
+                })
+                  //console.log("after location");
 
             }
           }

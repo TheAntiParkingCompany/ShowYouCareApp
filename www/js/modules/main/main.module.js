@@ -5,7 +5,8 @@
     .module('main', [
       'angular-uuid',
       'monospaced.qrcode',
-      'push'
+      'push',
+      'app.locations'
     ])
     .config(function($stateProvider){
       $stateProvider
