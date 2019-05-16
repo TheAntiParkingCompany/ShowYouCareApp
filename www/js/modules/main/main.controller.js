@@ -85,6 +85,7 @@
                   }
                   else{
                     console.log("locationdissabled");
+                    //add turn on location message
                   }
                 };
                 //console.log("location2");
@@ -97,6 +98,10 @@
                       console.log(vm.state.latitude);
                       lat=vm.state.latitude;
                       lon=vm.state.longitude;
+                      vm.trueLat=lat;
+                      vm.trueLon=lon;
+                      vm.mileLat=1/69;
+                      vm.mileLon=lat*(Math.PI/180)/(Math.cos(lat*(Math.PI/180))*69.127  ); 
                       console.log(vm.state.longitude);
 
                       myLocation.latitude=lat;
@@ -118,6 +123,60 @@
 
                           lat=$$state.result.latitude;
                           lon=$$state.result.longitude;
+                          //used to add a precentage of original opsition to the postcode center
+                          vm.randomaddsub=Math.floor(Math.random()*(4)+1);
+                          vm.randomPercent=Math.random()*0.25;
+                          switch(vm.randomaddsub){
+                                case 1:
+                                //+lat +lon
+                                lat=lat+(vm.randomPercent*vm.mileLat);
+                                lon=lon+(vm.randomPercent*vm.mileLon);
+                                break;
+                                case 2:
+                                //+lat - lon
+                                lat=lat+(vm.randomPercent*vm.mileLat);
+                                lon=lon-(vm.randomPercent*vm.mileLon);
+                                break;
+                                case 3:
+                                //-lat +lon
+                                lat=lat-(vm.randomPercent*vm.mileLat);
+                                lon=lon+(vm.randomPercent*vm.mileLon);
+                                break;
+                                case 4:
+                                //-lat -lon
+                                lat=lat-(vm.randomPercent*vm.mileLat);
+                                lon=lon-(vm.randomPercent*vm.mileLon);
+                                break;
+                                default:
+                                //+lat +lon
+                                lat=lat+(vm.randomPercent*vm.mileLat);
+                                lon=lon+(vm.randomPercent*vm.mileLon);
+                                break;
+
+                          }
+                          console.log("random test");
+                          console.log(vm.randomPercent);
+                          console.log(vm.randomPercent);
+                          console.log(vm.randomPercent);
+                          console.log(vm.randomPercent);
+
+                          console.log("Lat="+lat);
+                          console.log("Lon="+lon);
+
+                          
+
+
+                          /*
+                          vm.random=Math.random()*(70-5)+5;
+                          vm.thisRandom=vm.random;
+                          console.log("lat="+lat);
+                          console.log("lon="+lon);
+                          lat=lat + (vm.thisRandom*(vm.trueLat-lat));
+                          lon=lon + (vm.thisRandom*(vm.trueLon-lon));
+                          console.log("lat="+lat);
+                          console.log("lon="+lon); 
+ */
+
 
                           //post
                           var date= Date.now();
