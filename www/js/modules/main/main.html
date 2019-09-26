@@ -1,6 +1,15 @@
 <ion-view >
   <div id="main">
 
+      <div class="onoffswitch">
+          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+          <label class="onoffswitch-label" for="myonoffswitch">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"></span>
+          </label>
+      </div>
+      
+
   <div id="not-connected" ng-show="!vm.pushConnected">Connecting...
     <button ion-button round ng-click="vm.initialise();">Retry</button>
   </div>
@@ -11,7 +20,8 @@
 
   <div style="padding:16px;" ng-show="vm.deviceId!==false">
     <div ng-show="vm.activity===vm.ACTIVITY.SCAN">
-      <button ion-button round ng-click="vm.startCodeScan()">Scan QR Code</button>
+        <button ion-button round ng-click="vm.waitThenSettings()">Scan QR Code</button>
+      <!-- <button ion-button round ng-click="(vm.locationenabled ? vm.startCodeScan() : waitThenSettings())">Scan QR Code</button> -->
     </div>
     </div>
   </div>
