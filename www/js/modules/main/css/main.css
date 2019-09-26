@@ -59,5 +59,21 @@ p{
     margin-top: 2px;
     padding-top:5px;
   }
-  
+  #retryButton{
+    background: none;
+    border:none;
+    font-size:16px;
+    width:200px;
+    background-color:#155BB4;
+    color:white;
+    box-shadow:0px 0px 7px black;
+    border-radius: 3px;
+    display:block;
+    padding-top:5px;
+    padding-bottom: 5px;
+    margin-top:5px;
+    
+    margin-left:auto;
+    margin-right:auto;
+  }
  

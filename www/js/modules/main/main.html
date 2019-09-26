@@ -1,7 +1,7 @@
 <ion-view >
   <head>
       <meta charset="UTF-8">
-      <link rel="stylesheet" href="../main/css/main.css">
+      <!-- <link rel="stylesheet" href="../main/css/main.css"> -->
   </head>
   <body>
     <h1>Show You Care Park Elswehre</h1>
@@ -19,7 +19,7 @@
         
 
   <div id="not-connected" ng-show="!vm.pushConnected"><p>Connecting...</p>
-    <button ion-button round ng-click="vm.initialise();">Retry</button>
+    <button ion-button round ng-click="vm.initialise();" id="retryButton">Retry</button>
   </div>
 
   <div id="connected" ng-show="vm.pushConnected===true">
@@ -35,9 +35,9 @@
   </div>
 
   <div ng-show="vm.uuid!=false">
-    <p>UUID: vm.uuid</p>
+    <p>UUID: {{vm.uuid}}</p>
     <!-- UUID:{{vm.uuid}}-->
-    <p>vm.subscriptionFeedback</p>
+    <p>{{vm.subscriptionFeedback}}</p>
     <!-- {{vm.subscriptionFeedback}}-->
   </div>
 </body>
