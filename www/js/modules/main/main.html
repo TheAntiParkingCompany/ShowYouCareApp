@@ -1,23 +1,31 @@
 <ion-view >
-  <div id="main">
+  <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="../main/css/main.css">
+  </head>
+  <body>
+    <h1>Show You Care Park Elswehre</h1>
+    <img src="css/logo.png"></img>
 
-      <div class="onoffswitch">
-          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
-          <label class="onoffswitch-label" for="myonoffswitch">
-              <span class="onoffswitch-inner"></span>
-              <span class="onoffswitch-switch"></span>
-          </label>
-      </div>
-      
+    <div id="main">
 
-  <div id="not-connected" ng-show="!vm.pushConnected">Connecting...
+        <div class="onoffswitch">
+            <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+            <label class="onoffswitch-label" for="myonoffswitch">
+                <span class="onoffswitch-inner"></span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+        
+
+  <div id="not-connected" ng-show="!vm.pushConnected"><p>Connecting...</p>
     <button ion-button round ng-click="vm.initialise();">Retry</button>
   </div>
 
   <div id="connected" ng-show="vm.pushConnected===true">
     <p>Connected.</p>
   </div>
-
+  <p>To report an incident please scan an unique Show You care Park Elswhere QR code!</p>
   <div style="padding:16px;" ng-show="vm.deviceId!==false">
     <div ng-show="vm.activity===vm.ACTIVITY.SCAN">
         <button ion-button round ng-click="vm.waitThenSettings()">Scan QR Code</button>
@@ -27,8 +35,11 @@
   </div>
 
   <div ng-show="vm.uuid!=false">
-    UUID:{{vm.uuid}}
-    <div>{{vm.subscriptionFeedback}}</div>
+    <p>UUID: vm.uuid</p>
+    <!-- UUID:{{vm.uuid}}-->
+    <p>vm.subscriptionFeedback</p>
+    <!-- {{vm.subscriptionFeedback}}-->
   </div>
+</body>
 </ion-view>
 
