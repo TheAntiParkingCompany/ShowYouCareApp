@@ -1,5 +1,5 @@
 # ShowYouCareApp
-It's a pretty simple responsive app which lets anyone logg in an accident through scanning already printed QR code.
+It's a mobile app which lets anyone log in an accident through scanning already printed QR code.
 
 ## How did we do it? 
 We used a simple QR and barcode scanner [app](https://github.com/aliceliveprojects/little_scanner) which we implemented for the needs of the SYCPE project.
